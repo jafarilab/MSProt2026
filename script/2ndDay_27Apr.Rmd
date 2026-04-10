@@ -1,19 +1,22 @@
 ---
 title: "Introduction to Spectra object"
-author: "Mohieddin Ja = ari"
+author: "Mohieddin Jafari"
 date: "`r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`"
 output: html_document
 ---
 ### Quiz 1 (IA_4)
-Visit `gosocrative.com` and enter room name `FIN2025`
+Visit `gosocrative.com` and enter room name `FIN2026`
 
 ## Library
-```{r}
+```{r, message=FALSE, warning=FALSE}
+# if (!require("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("PSMatch")
 # if (!requireNamespace("remotes", quietly = TRUE))
 #     install.packages("remotes")
 # 
 # remotes::install_github("RforMassSpectrometry/SpectraVis")
-
 
 library(rpx)
 library(msdata)
@@ -28,6 +31,7 @@ library(mzR)
 library(PSMatch)
 ```
 
+# Toy spectra
 ```{r}
 ## Let’s create a DataFrame containing MS levels, retention time, m/z and intensities for 2 spectra
 
@@ -50,7 +54,6 @@ spd$intensity <- list(
 (sp <- Spectra(spd))
 ```
 
-
 ```{r, include=FALSE, echo=FALSE, eval=FALSE}
 # Exercise: what are these additional spectra variables that are available as part of this dataset?
 spectraVariables(sp)
@@ -65,9 +68,8 @@ sp[c(1 ,2, 1, 1)]
 ```{r}
 f <- pxget(PXDataset("PXD000001"), 
            "TMT_Erwinia_1uLSike_Top10HCD_isol2_45stepped_60min_01-20141210.mzML")
-(sp <- Spectra(f))
-Spectra(spd)
-# It retrieves from Hard not memory when it is not manually created spectra (MsBackendMzR), so it takes a little bit of time to retrieve.
+(sp <- Spectra(f)) # It retrieves from Hard not memory when it is not manually created spectra (MsBackendMzR), so it takes a little bit of time to retrieve.
+
 print(object.size(sp), units = "Mb") # Small and not overload memory
 
 length(sp)
@@ -80,17 +82,115 @@ head(pd[[1345]])
 ## ---- ACCESSING AND ADDING DATA ----
 ```
 
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+ms_fields <- data.frame(
+  Category = c(
+    rep("Basic Info", 6),
+    rep("Signal Processing", 3),
+    rep("Precursor (MS/MS)", 5),
+    rep("Isolation Window", 3),
+    rep("Spectrum Statistics", 4),
+    rep("m/z Range", 2),
+    rep("Acquisition Details", 2),
+    rep("Merging Info", 4),
+    rep("Advanced", 4)
+  ),
+  Field = c(
+    "msLevel","rtime","acquisitionNum","scanIndex","spectrumId","dataOrigin",
+    "centroided","smoothed","polarity",
+    "precursorMz","precursorIntensity","precursorCharge","precScanNum","collisionEnergy",
+    "isolationWindowLowerMz","isolationWindowTargetMz","isolationWindowUpperMz",
+    "peaksCount","totIonCurrent","basePeakMZ","basePeakIntensity",
+    "lowMZ","highMZ",
+    "injectionTime","filterString",
+    "mergedScan","mergedResultScanNum","mergedResultStartScanNum","mergedResultEndScanNum",
+    "ionMobilityDriftTime","scanWindowLowerLimit","scanWindowUpperLimit","electronBeamEnergy"
+  ),
+  Description = c(
+
+    # Basic Info
+    "MS level of the scan (e.g., MS1 = full scan, MS2 = fragmentation scan). Example: MS2 is used for peptide identification.",
+    "Retention time (in seconds) when the spectrum was recorded during LC separation. Example: 320.5 sec = ~5.3 min into run.",
+    "Sequential scan acquisition number assigned by the instrument.",
+    "Index position of the spectrum in the dataset.",
+    "Unique spectrum identifier string.",
+    "Original raw file or dataset source.",
+
+    # Signal processing
+    "Whether peak detection is centroided (TRUE = peaks simplified to single m/z-intensity pairs).",
+    "Whether signal smoothing was applied before peak detection.",
+    "Ion polarity used in MS (positive or negative mode).",
+
+    # Precursor
+    "m/z of selected precursor ion for MS/MS fragmentation. Example: 523.2 m/z peptide ion.",
+    "Intensity of precursor ion before fragmentation (signal strength).",
+    "Charge state of precursor ion (e.g., +2, +3 typical for peptides).",
+    "Scan number where precursor ion was detected.",
+    "Collision energy used to fragment precursor ions (higher = stronger fragmentation).",
+
+    # Isolation window
+    "Lower boundary of m/z window used to isolate precursor ion.",
+    "Target m/z selected for isolation and fragmentation.",
+    "Upper boundary of isolation window.",
+
+    # Spectrum statistics
+    "Number of detected peaks in the spectrum.",
+    "Total ion current (sum of all intensities in the scan).",
+    "m/z value of the most intense peak in the spectrum.",
+    "Intensity of the base peak (strongest signal).",
+
+    # m/z range
+    "Lowest m/z value recorded in the scan (instrument range start).",
+    "Highest m/z value recorded in the scan (instrument range end).",
+
+    # Acquisition details
+    "Ion injection time (how long ions were accumulated before scan).",
+    "Instrument filter string describing scan settings (e.g., MS2 selection rules).",
+
+    # Merging info
+    "Whether multiple scans were merged into one spectrum.",
+    "Scan number of merged result.",
+    "Starting scan number used in merging.",
+    "Ending scan number used in merging.",
+
+    # Advanced
+    "Ion mobility drift time (separation dimension in IMS experiments).",
+    "Lower m/z limit of scan window.",
+    "Upper m/z limit of scan window.",
+    "Electron beam energy used in fragmentation (instrument-specific)."
+  ),
+  stringsAsFactors = FALSE
+)
+
+ms_fields %>%
+  kable("html", escape = FALSE, align = "l") %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+    full_width = FALSE,
+    font_size = 13
+  ) %>%
+  column_spec(1, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top")
+
+```
+
+
 ```{r}
 #Two ways for a purpose
 head(msLevel(sp), 300)
-head(sp$msLevel, 300)
+#head(sp$msLevel, 300)
 
 msLevel(sp)[[1234]]
-plot(pd[[1234]], type = "h")
-#grid()
+plot(pd[[1234]], type = "h"); grid()
 
-plot(pd[[1234]], type = "h", xlim = c(450, 500))
-plot(pd[[1234]], type = "l", xlim = c(450, 500))
+plot(pd[[1234]], type = "h", xlim = c(450, 500)); grid()
+plot(pd[[1234]], type = "l", xlim = c(450, 500)); grid()
 head(pd[[1234]])
 sp$intensity[[1234]] |> summary()
 
@@ -106,36 +206,34 @@ table(msLevel(sp))
 
 #filter family functions
 (sp2 <- filterMsLevel(sp, 2L))
-sp[msLevel(sp) == 2L]
+#sp[msLevel(sp) == 2L]
 
 max(sp$basePeakIntensity)
 rtime(sp)[1234]
 
-plotSpectra(sp2[5404])
-plotSpectra(sp2[1234])
-plotSpectra(sp2[1230])
-plotSpectra(sp2[1230:1233])
-plotSpectra(sp[1])
+plotSpectra(sp2[5404]); grid()
+plotSpectra(sp2[1234]); grid()
+plotSpectra(sp2[1230]); grid()
+plotSpectra(sp[226:229]) # MS1 vs. MS2 spectra
+plotSpectra(sp[1]); grid()
 plotSpectra(sp[1:4])
 
 ```
 ### Quiz 2 (GA_5)
-Visit `gosocrative.com` and enter room name `FIN2025`
-
-#---Next Session---
+Visit `gosocrative.com` and enter room name `FIN2026`
 
 ## Visulaize spectra
 ```{r}
-## The chromatogram can be created by extracting the totIonCurrent (TIC) and rtime variables for all MS1 spectra. ## Lets annotate the spectrum of interest.
+## The chromatogram can be created by extracting the totIonCurrent (TIC) and rtime variables for all MS1 spectra. 
+## Lets annotate the spectrum of interest.
 
-plot(rtime(sp), tic(sp), type = "l")
-plot(sp$rtime, sp$totIonCurrent, type = "l")
+plot(rtime(sp), tic(sp), type = "l"); grid()
+#plot(sp$rtime, sp$totIonCurrent, type = "l"); grid()
 
-sp1 <- filterMsLevel(sp, 1L)
-plot(rtime(sp1), tic(sp1), type = "l")
-abline(v = rtime(sp)[2807], col = "red")
+(sp1 <- filterMsLevel(sp, 1L))
+plot(rtime(sp1), tic(sp1), type = "l"); grid(); abline(v = rtime(sp)[2807], col = "red")
 
-MsCoreUtils::formatRt(rtime(sp)[2800:2820])
+MsCoreUtils::formatRt(rtime(sp)[2800:2820]) # Min:Sec
 
 sp[2807]
 
@@ -163,13 +261,12 @@ precScanNum(sp2)
 # Plot the MS1 spectrum of interest and highlight all the peaks that will be selected for MS2 analysis
 # plotSpectra()
 
-plotSpectra(sp2[1], xlim = c(400, 1000))
-abline(v = precursorMz(sp2)[-1], col = "gray")
+plotSpectra(sp2[1], xlim = c(400, 1000)); grid(); abline(v = precursorMz(sp2)[-1], col = "blue")
 
 # Use plotSpectra() function to plot all 10 MS2 spectra in one call.
 plotSpectra(sp2[-1])
-plotSpectra(sp2[2:11])
-plotSpectra(filterMsLevel(sp2, 2L))[1]
+# plotSpectra(sp2[2:11])
+# plotSpectra(filterMsLevel(sp2, 2L))[1]
 ```
 
 ## Focus of mz range
