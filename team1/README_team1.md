@@ -9,6 +9,30 @@ University of Helsinki – Spring 2026
 
 ---
 
+## Team Member Roles
+
+Each team member should take responsibility for one or more of the following tasks:
+
+- **SDRF Maker**  ()
+
+  Responsible for creating and validating the `SDRF.tsv` file according to required standards.
+
+- **Software Runner**  ()
+
+  Handles running the assigned DIA analysis software and generating identification results.
+
+- **Repository Manager (Pulling Fork)** ()  
+
+  Manages the GitHub workflow, including pulling updates, maintaining the fork, and organizing files.
+
+- **Report Writer**  ()
+
+  Leads the documentation and writing of project reports, including methods, results, and interpretations.
+
+>💡 Team members are encouraged to collaborate and support each other across roles.
+
+---
+
 ## Contents of this folder
 
 - `SDRF.tsv`  
