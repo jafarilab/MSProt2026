@@ -1,0 +1,85 @@
+﻿sample;condition;batch;replicate
+20260331_CTRL1_1;Control;0;1
+20260331_CTRL1_2;Control;0;2
+20260331_CTRL1_3;Control;0;3
+20260331_CTRL2_1;Control;0;1
+20260331_CTRL2_2;Control;0;2
+20260331_CTRL2_3;Control;0;3
+Group1_CTRL_1;Control;I;1
+Group1_CTRL_2;Control;I;2
+Group1_CTRL_3;Control;I;3
+Group2_CTRL_1;Control;II;1
+Group2_CTRL_2;Control;II;2
+Group2_CTRL_3;Control;II;3
+Group3_CTRL_1;Control;III;1
+Group3_CTRL_2;Control;III;2
+Group3_CTRL_3;Control;III;3
+Group4_CTRL_1;Control;IV;1
+Group4_CTRL_2;Control;IV;2
+Group4_CTRL_3;Control;IV;3
+Group1_CTRL_cDDP_24h_1;Control (cDDP, 24h);I;1
+Group1_CTRL_cDDP_24h_2;Control (cDDP, 24h);I;2
+Group1_CTRL_cDDP_24h_3;Control (cDDP, 24h);I;3
+Group2_CTRL_cDDP_24h_1;Control (cDDP, 24h);II;1
+Group2_CTRL_cDDP_24h_2;Control (cDDP, 24h);II;2
+Group2_CTRL_cDDP_24h_3;Control (cDDP, 24h);II;3
+20260331_CTRL_cDDP_24h1_1;Control (cDDP, 24h);0;1
+20260331_CTRL_cDDP_24h1_2;Control (cDDP, 24h);0;2
+20260331_CTRL_cDDP_24h1_3;Control (cDDP, 24h);0;3
+20260331_c-jun_KO_cDDP_24h1_1;c-jun KO (cDDP, 24h);0;1
+20260331_c-jun_KO_cDDP_24h1_2;c-jun KO (cDDP, 24h);0;2
+20260331_c-jun_KO_cDDP_24h1_3;c-jun KO (cDDP, 24h);0;3
+20260331_c-jun_KO_cDDP_24h2_1;c-jun KO (cDDP, 24h);0;1
+20260331_c-jun_KO_cDDP_24h2_2;c-jun KO (cDDP, 24h);0;2
+20260331_c-jun_KO_cDDP_24h2_3;c-jun KO (cDDP, 24h);0;3
+Group1_c-jun_KO_cDDP_24h_1;c-jun KO (cDDP, 24h);I;1
+Group1_c-jun_KO_cDDP_24h_2;c-jun KO (cDDP, 24h);I;2
+Group1_c-jun_KO_cDDP_24h_3;c-jun KO (cDDP, 24h);I;3
+Group2_c-jun_KO_cDDP_24h_1;c-jun KO (cDDP, 24h);II;1
+Group2_c-jun_KO_cDDP_24h_2;c-jun KO (cDDP, 24h);II;2
+Group2_c-jun_KO_cDDP_24h_3;c-jun KO (cDDP, 24h);II;3
+20260331_c-jun_KO1_1;c-jun KO;0;1
+20260331_c-jun_KO1_2;c-jun KO;0;2
+20260331_c-jun_KO1_3;c-jun KO;0;3
+20260331_c-jun_KO2_1;c-jun KO;0;1
+20260331_c-jun_KO2_2;c-jun KO;0;2
+20260331_c-jun_KO2_3;c-jun KO;0;3
+Group1_c-jun_KO_1;c-jun KO;I;1
+Group1_c-jun_KO_2;c-jun KO;I;2
+Group1_c-jun_KO_3;c-jun KO;I;3
+Group2_c-jun_KO_1;c-jun KO;II;1
+Group2_c-jun_KO_2;c-jun KO;II;2
+Group2_c-jun_KO_3;c-jun KO;II;3
+Group3_c-jun_KO_1;c-jun KO;III;1
+Group3_c-jun_KO_2;c-jun KO;III;2
+Group3_c-jun_KO_3;c-jun KO;III;3
+Group4_c-jun_KO_1;c-jun KO;IV;1
+Group4_c-jun_KO_2;c-jun KO;IV;2
+Group4_c-jun_KO_3;c-jun KO;IV;3
+20260331_CTRL_JNK-IN-8_cDDP_24h1_1;Control (JNK-IN-8, cDDP, 24h);0;1
+20260331_CTRL_JNK-IN-8_cDDP_24h1_2;Control (JNK-IN-8, cDDP, 24h);0;2
+20260331_CTRL_JNK-IN-8_cDDP_24h1_3;Control (JNK-IN-8, cDDP, 24h);0;3
+Group1_CTRL_JNK-IN-8_cDDP_24h_1;Control (JNK-IN-8, cDDP, 24h);I;1
+Group1_CTRL_JNK-IN-8_cDDP_24h_2;Control (JNK-IN-8, cDDP, 24h);I;2
+Group1_CTRL_JNK-IN-8_cDDP_24h_3;Control (JNK-IN-8, cDDP, 24h);I;3
+Group2_CTRL_JNK-IN-8_cDDP_24h_1;Control (JNK-IN-8, cDDP, 24h);II;1
+Group2_CTRL_JNK-IN-8_cDDP_24h_2;Control (JNK-IN-8, cDDP, 24h);II;2
+Group2_CTRL_JNK-IN-8_cDDP_24h_3;Control (JNK-IN-8, cDDP, 24h);II;3
+Group3_c-jun_KO_cDDP_06h_1;c-jun KO (cDDP, 6h);III;1
+Group3_c-jun_KO_cDDP_06h_2;c-jun KO (cDDP, 6h);III;2
+Group3_c-jun_KO_cDDP_06h_3;c-jun KO (cDDP, 6h);III;3
+Group4_c-jun_KO_cDDP_06h_1;c-jun KO (cDDP, 6h);IV;1
+Group4_c-jun_KO_cDDP_06h_2;c-jun KO (cDDP, 6h);IV;2
+Group4_c-jun_KO_cDDP_06h_3;c-jun KO (cDDP, 6h);IV;3
+Group3_CTRL_cDDP_06h_1;c-jun KO (cDDP, 6h);III;1
+Group3_CTRL_cDDP_06h_2;c-jun KO (cDDP, 6h);III;2
+Group3_CTRL_cDDP_06h_3;c-jun KO (cDDP, 6h);III;3
+Group4_CTRL_cDDP_06h_1;c-jun KO (cDDP, 6h);IV;1
+Group4_CTRL_cDDP_06h_2;c-jun KO (cDDP, 6h);IV;2
+Group4_CTRL_cDDP_06h_3;c-jun KO (cDDP, 6h);IV;3
+Group3_CTRL_JNK-IN-8_cDDP_06h_1;Control (JNK-IN-8, cDDP, 6h);III;1
+Group3_CTRL_JNK-IN-8_cDDP_06h_2;Control (JNK-IN-8, cDDP, 6h);III;2
+Group3_CTRL_JNK-IN-8_cDDP_06h_3;Control (JNK-IN-8, cDDP, 6h);III;3
+Group4_CTRL_JNK-IN-8_cDDP_06h_1;Control (JNK-IN-8, cDDP, 6h);IV;1
+Group4_CTRL_JNK-IN-8_cDDP_06h_2;Control (JNK-IN-8, cDDP, 6h);IV;2
+Group4_CTRL_JNK-IN-8_cDDP_06h_3;Control (JNK-IN-8, cDDP, 6h);IV;3
