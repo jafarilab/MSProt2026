@@ -1,0 +1,261 @@
+---
+title: "Preprocessing and SummarizedExperiment Generation"
+author: "Muskan Kumari(Team1)"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+# Overview
+
+This report describes the preprocessing of AlphaDIA precursor-level output into a protein-level expression matrix and creation of a SummarizedExperiment object.
+
+```{r setup, message=FALSE, warning=FALSE}
+library(data.table)
+library(SummarizedExperiment)
+```
+
+#Read precursor file
+
+```{r}
+precursor <- fread("precursors.tsv")
+
+cat("Original dimensions\n")
+dim(precursor)
+```
+
+#Remove decoy precursors
+
+```{r}
+precursor <- precursor[precursor.decoy == 0]
+
+cat("Dimensions after decoy removal\n")
+dim(precursor)
+
+table(precursor$precursor.decoy)
+```
+
+#Keep required columns
+
+```{r}
+precursor <- precursor[, .(
+
+    precursor.mod_seq_charge_hash,
+
+    raw.name,
+
+    precursor.intensity,
+
+    precursor.qval,
+
+    precursor.score,
+
+    pg.proteins,
+
+    pg.genes
+
+)]
+
+head(precursor)
+```
+
+#Quality filtering
+
+```{r}
+precursor <- precursor[
+
+    precursor.qval < 0.01 &
+
+    !is.na(precursor.intensity) &
+
+    precursor.intensity > 0
+
+]
+
+cat("Dimensions after filtering\n")
+dim(precursor)
+
+summary(precursor$precursor.intensity)
+```
+
+#Extract representative protein IDs
+
+```{r}
+precursor[, protein_id := sub(";.*","",pg.proteins)]
+
+head(
+    precursor[,.(pg.proteins,protein_id)]
+)
+```
+
+#Read contaminant proteins
+
+```{r}
+contaminants <- unique(
+    readLines("contaminat_protein_ids.txt")
+)
+
+contaminants <- gsub("^REFSEQ:","",contaminants)
+contaminants <- gsub("^ENSEMBL:","",contaminants)
+contaminants <- gsub("^.*:","",contaminants)
+
+length(contaminants)
+```
+
+#Identify contaminants
+
+```{r}
+precursor[,contaminant := protein_id %in% contaminants]
+
+table(precursor$contaminant)
+```
+
+#Aggregate precursor intensities into proteins
+
+```{r}
+protein_matrix <- precursor[
+,
+.(intensity=sum(precursor.intensity,na.rm=TRUE)),
+by=.(protein_id,raw.name)
+]
+
+dim(protein_matrix)
+
+head(protein_matrix)
+```
+
+#Remove contaminant proteins
+
+```{r}
+protein_matrix <- protein_matrix[
+!protein_id %in% contaminants
+]
+
+dim(protein_matrix)
+```
+
+#Save long-format protein matrix
+
+```{r}
+fwrite(
+protein_matrix,
+"protein_matrix_long.tsv",
+sep="\t"
+)
+```
+
+#Convert to wide matrix
+
+```{r}
+protein_wide <- dcast(
+
+protein_matrix,
+
+protein_id~raw.name,
+
+value.var="intensity",
+
+fill=0
+
+)
+
+dim(protein_wide)
+
+head(protein_wide[,1:6])
+```
+
+#Expression matrix
+
+```{r}
+expr <- as.matrix(
+protein_wide[,-1]
+)
+
+rownames(expr) <- protein_wide$protein_id
+
+dim(expr)
+```
+
+#Filter proteins with >50% missing values
+
+```{r}
+missing <- rowSums(expr==0)
+
+keep <- missing <= 0.5*ncol(expr)
+
+expr <- expr[keep,]
+
+dim(expr)
+```
+
+#Log2 transformation
+
+```{r}
+expr <- log2(expr+1)
+
+summary(as.vector(expr))
+```
+
+#Read metadata
+
+```{r}
+metadata <- fread(
+"aplha_dia_metadata.csv"
+)
+
+head(metadata)
+```
+
+#Check sample names
+
+```{r}
+all(colnames(expr) %in% metadata$sample)
+
+all(metadata$sample %in% colnames(expr))
+```
+
+#Match metadata
+
+```{r}
+metadata <- metadata[
+match(
+colnames(expr),
+metadata$sample
+),
+]
+
+head(metadata)
+```
+
+#Create SummarizedExperiment
+
+```{r}
+se <- SummarizedExperiment(
+
+assays=list(intensity=expr),
+
+colData=metadata)
+
+se
+```
+
+#Save outputs
+
+```{r}
+saveRDS(
+se,"protein_SE.rds")
+
+write.csv(assay(se),"protein_matrix.csv")
+
+cat("Files saved successfully.\n")
+```
+
+#Session Information
+
+```{r}
+sessionInfo()
+```
+
